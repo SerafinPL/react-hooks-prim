@@ -9,7 +9,7 @@ const Ingredients = (props) => {
 	const [userIngredients, setUserIngredients] = useState([]);
 
 	useEffect(() => {
-		
+
 		fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json')
 			.then(response => response.json())
 				.then(responseData => {
@@ -20,7 +20,7 @@ const Ingredients = (props) => {
 					setUserIngredients(loadedIngredients);
 				}); 
 
-	});
+	}, []);
 
 
 
