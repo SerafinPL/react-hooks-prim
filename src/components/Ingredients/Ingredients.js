@@ -6,15 +6,24 @@ import Search from './Search';
 
 const Ingredients = (props) => {
 
-	const [ingredients, setIngredients] = useState([]);
+	const [userIngredients, setUserIngredients] = useState([]);
+
+	const addIngredientHandler = ingredient => {
+		setUserIngredients( prevState => [
+			...prevState , 
+			{
+				id: new Date().getTime(), 
+				...ingredient
+			}] );
+	};
 
   	return (
     	<div className="App">
-      		<IngredientForm />
+      		<IngredientForm onAddIngr={addIngredientHandler}/>
 
       		<section>
         		<Search />
-        		<IngredientList/>
+        		<IngredientList ingredients={userIngredients} onRemoveItem={ () => {} }/>
       		</section>
     	</div>
   );
