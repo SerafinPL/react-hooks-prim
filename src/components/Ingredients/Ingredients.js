@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
@@ -7,6 +7,22 @@ import Search from './Search';
 const Ingredients = (props) => {
 
 	const [userIngredients, setUserIngredients] = useState([]);
+
+	useEffect(() => {
+		
+		fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json')
+			.then(response => response.json())
+				.then(responseData => {
+					const loadedIngredients = [];
+					for (const key in responseData){
+						loadedIngredients.push({id: key, ...responseData[key]})
+					}
+					setUserIngredients(loadedIngredients);
+				}); 
+
+	});
+
+
 
 	const addIngredientHandler = ingredient => {
 		fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
