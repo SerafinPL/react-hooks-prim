@@ -9,6 +9,11 @@ const Ingredients = (props) => {
 	const [userIngredients, setUserIngredients] = useState([]);
 
 	const addIngredientHandler = ingredient => {
+		fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
+			method: 'POST',
+			body: JSON.stringify(ingredient),
+			headers: {'Content-Type': 'application/json'}
+		}).then();
 		setUserIngredients( prevState => [
 			...prevState , 
 			{
@@ -18,9 +23,9 @@ const Ingredients = (props) => {
 	};
 
 	const removeIngredientHandler = id => {
-		const ingredientsArray = userIngredients.filter((value) => value.id !== id);
-		setUserIngredients([...ingredientsArray]);
-
+		// const ingredientsArray = userIngredients.filter((value) => value.id !== id);
+		// setUserIngredients([...ingredientsArray]);
+		setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
 	}
 
   	return (
@@ -29,7 +34,7 @@ const Ingredients = (props) => {
 
       		<section>
         		<Search />
-        		<IngredientList ingredients={userIngredients} onRemoveItem={ (id) => {removeIngredientHandler(id)} }/>
+        		<IngredientList ingredients={userIngredients} onRemoveItem={ removeIngredientHandler }/>
       		</section>
     	</div>
   );
