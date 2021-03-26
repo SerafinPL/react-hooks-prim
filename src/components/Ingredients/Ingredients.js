@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
@@ -22,6 +22,9 @@ const Ingredients = (props) => {
 
 	}, []);
 
+	const filteredIngredientsHandler = (ingredientsArray) => {
+		setUserIngredients(ingredientsArray);
+	}
 
 
 	const addIngredientHandler = ingredient => {
@@ -53,7 +56,7 @@ const Ingredients = (props) => {
       		<IngredientForm onAddIngr={addIngredientHandler}/>
 
       		<section>
-        		<Search />
+        		<Search onLoadIngr={filteredIngredientsHandler} />
         		<IngredientList ingredients={userIngredients} onRemoveItem={ removeIngredientHandler }/>
       		</section>
     	</div>
