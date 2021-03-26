@@ -13,13 +13,17 @@ const Ingredients = (props) => {
 			method: 'POST',
 			body: JSON.stringify(ingredient),
 			headers: {'Content-Type': 'application/json'}
-		}).then();
-		setUserIngredients( prevState => [
+		}).then(response => {
+			return response.json();
+		}).then(responseData => {
+			setUserIngredients( prevState => [
 			...prevState , 
 			{
-				id: new Date().getTime(), 
+				id: responseData.name, 
 				...ingredient
 			}] );
+		});
+		
 	};
 
 	const removeIngredientHandler = id => {
