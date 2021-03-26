@@ -8,23 +8,27 @@ const Ingredients = (props) => {
 
 	const [userIngredients, setUserIngredients] = useState([]);
 
+	// useEffect(() => {
+
+	// 	fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json')
+	// 		.then(response => response.json())
+	// 			.then(responseData => {
+	// 				const loadedIngredients = [];
+	// 				for (const key in responseData){
+	// 					loadedIngredients.push({id: key, ...responseData[key]})
+	// 				}
+	// 				setUserIngredients(loadedIngredients);
+	// 			}); 
+
+	// }, []);
+
 	useEffect(() => {
+		console.log('RENDERING INGREDIENTS ', userIngredients);
+	},[userIngredients]);
 
-		fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json')
-			.then(response => response.json())
-				.then(responseData => {
-					const loadedIngredients = [];
-					for (const key in responseData){
-						loadedIngredients.push({id: key, ...responseData[key]})
-					}
-					setUserIngredients(loadedIngredients);
-				}); 
-
-	}, []);
-
-	const filteredIngredientsHandler = (ingredientsArray) => {
+	const filteredIngredientsHandler = useCallback((ingredientsArray) => {
 		setUserIngredients(ingredientsArray);
-	}
+	}, []);
 
 
 	const addIngredientHandler = ingredient => {
