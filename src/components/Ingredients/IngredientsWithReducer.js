@@ -1,4 +1,4 @@
-import React, {useReducer, useEffect, useCallback} from 'react';
+import React, {useReducer, useEffect, useCallback, useState} from 'react';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
@@ -7,13 +7,13 @@ import ErrorModal from '../UI/ErrorModal';
 
 const ingredientReducer = (currentIngredients, action) => {
 
-	switch(atcion.type){
+	switch(action.type){
 		case 'SET':
 			return action.ingredients;
 		case 'ADD':
 			return [...currentIngredients, action.ingredient];
 		case 'DELETE':
-			return currentIngredients.filetr(ing => ing.id !== action.id);
+			return currentIngredients.filter(ing => ing.id !== action.id);
 		default:
 			throw new Error('błąd który nie wystąpi');
 	};//switch
@@ -21,10 +21,11 @@ const ingredientReducer = (currentIngredients, action) => {
 };
 
 const Ingredients = (props) => {
-	useReducer(ingredientReducer, []); //(function, initialState)
+	/* [state, function to dipatch actions ]*/
+	const [userIngredients, dispatch] = useReducer(ingredientReducer, []); //(function, initialState)
 	// const [userIngredients, setUserIngredients] = useState([]);
-	// const [isLoading, setIsLoading] = useState(false);
-	// const [error, setError] = useState();
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState();
 
 	// useEffect(() => {
 
@@ -44,8 +45,13 @@ const Ingredients = (props) => {
 		console.log('RENDERING INGREDIENTS ', userIngredients);
 	},[userIngredients]);
 
-	const filteredIngredientsHandler = useCallback((ingredientsArray) => {
-		setUserIngredients(ingredientsArray);
+	const filteredIngredientsHandler = useCallback((ingredientsFilteredArray) => {
+		//setUserIngredients(ingredientsArray);
+		dispatch({
+			type: 'SET',
+			ingredients: ingredientsFilteredArray
+
+		});
 	}, []);
 
 
@@ -59,12 +65,19 @@ const Ingredients = (props) => {
 			setIsLoading(false);
 			return response.json();
 		}).then(responseData => {
-			setUserIngredients( prevState => [
-			...prevState , 
-			{
-				id: responseData.name, 
-				...ingredient
-			}] );
+			// setUserIngredients( prevState => [
+			// ...prevState , 
+			// {
+			// 	id: responseData.name, 
+			// 	...ingredient
+			// }] );
+			dispatch({
+				type: 'ADD',
+				ingredient: {
+								id: responseData.name,
+								...ingredient
+							} 
+			});
 		}).catch(error => {
 			setIsLoading(false);
 			setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
@@ -79,10 +92,16 @@ const Ingredients = (props) => {
 		setIsLoading(true);
 		fetch(`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`,{
 			method: 'DELETE',
-		}).then(respones => {
-			setIsLoading(false);
-			setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
-		}).catch(error => {
+		})
+		.then(respones => {
+			 setIsLoading(false);
+			// setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
+			dispatch({
+				type: 'DELETE',
+				id: id
+			})
+		})
+		.catch(error => {
 			setIsLoading(false);
 			setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
 		});
