@@ -50,7 +50,10 @@ const Ingredients = (props) => {
 				id: responseData.name, 
 				...ingredient
 			}] );
-		});
+		}).catch(error => {
+			setIsLoading(false);
+			setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
+		});;
 		
 	};
 
@@ -59,20 +62,19 @@ const Ingredients = (props) => {
 		// setUserIngredients([...ingredientsArray]);
 		//setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
 		setIsLoading(true);
-		fetch(`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.jon`,{
+		fetch(`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`,{
 			method: 'DELETE',
 		}).then(respones => {
 			setIsLoading(false);
 			setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
 		}).catch(error => {
-			
+			setIsLoading(false);
 			setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
-			
 		});
 	}
 
 	const clearError = () => {
-		setIsLoading(false);
+		
 		setError(null);
 
 	}
