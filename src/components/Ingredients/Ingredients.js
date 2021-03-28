@@ -52,7 +52,13 @@ const Ingredients = (props) => {
 	const removeIngredientHandler = id => {
 		// const ingredientsArray = userIngredients.filter((value) => value.id !== id);
 		// setUserIngredients([...ingredientsArray]);
-		setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
+		//setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
+
+		fetch(`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`,{
+			method: 'DELETE',
+		}).then(respones => {
+			setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
+		});
 	}
 
   	return (
