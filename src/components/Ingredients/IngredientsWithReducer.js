@@ -81,7 +81,7 @@ const Ingredients = (props) => {
 
   	return (
     	<div className="App">
-    		<h1 style={{textAlign: 'center'}}>Lista Zakupów Na useState</h1>
+    		<h1 style={{textAlign: 'center'}}>Lista Zakupów Na useReducer</h1>
     		{error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
       		<IngredientForm 
       			onAddIngr={addIngredientHandler}
