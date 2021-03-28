@@ -65,16 +65,22 @@ const Ingredients = (props) => {
 			setIsLoading(false);
 			setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
 		}).catch(error => {
-			setIsLoading(false);
+			
 			setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
 			
 		});
 	}
 
+	const clearError = () => {
+		setIsLoading(false);
+		setError(null);
+
+	}
+
   	return (
     	<div className="App">
 
-    	{error && <ErrorModal>{error}</ErrorModal>}
+    	{error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
       		<IngredientForm 
       			onAddIngr={addIngredientHandler}
       			loading={isLoading}
