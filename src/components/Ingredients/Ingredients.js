@@ -56,11 +56,14 @@ const Ingredients = (props) => {
 		// const ingredientsArray = userIngredients.filter((value) => value.id !== id);
 		// setUserIngredients([...ingredientsArray]);
 		//setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
-
+		setIsLoading(true);
 		fetch(`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`,{
 			method: 'DELETE',
 		}).then(respones => {
+			setIsLoading(false);
 			setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
+		}).catch(erroe => {
+			setIsLoading(false);
 		});
 	}
 
