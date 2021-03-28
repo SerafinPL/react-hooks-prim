@@ -7,6 +7,7 @@ import Search from './Search';
 const Ingredients = (props) => {
 
 	const [userIngredients, setUserIngredients] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
 
 	// useEffect(() => {
 
@@ -32,11 +33,13 @@ const Ingredients = (props) => {
 
 
 	const addIngredientHandler = ingredient => {
+		setIsLoading(true);
 		fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
 			method: 'POST',
 			body: JSON.stringify(ingredient),
 			headers: {'Content-Type': 'application/json'}
 		}).then(response => {
+			setIsLoading(false);
 			return response.json();
 		}).then(responseData => {
 			setUserIngredients( prevState => [
