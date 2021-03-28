@@ -1,15 +1,30 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useReducer, useEffect, useCallback} from 'react';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
 import ErrorModal from '../UI/ErrorModal';
 
-const Ingredients = (props) => {
+const ingredientReducer = (currentIngredients, action) => {
 
-	const [userIngredients, setUserIngredients] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState();
+	switch(atcion.type){
+		case 'SET':
+			return action.ingredients;
+		case 'ADD':
+			return [...currentIngredients, action.ingredient];
+		case 'DELETE':
+			return currentIngredients.filetr(ing => ing.id !== action.id);
+		default:
+			throw new Error('błąd który nie wystąpi');
+	};//switch
+
+};
+
+const Ingredients = (props) => {
+	useReducer(ingredientReducer, []); //(function, initialState)
+	// const [userIngredients, setUserIngredients] = useState([]);
+	// const [isLoading, setIsLoading] = useState(false);
+	// const [error, setError] = useState();
 
 	// useEffect(() => {
 
