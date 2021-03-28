@@ -66,7 +66,10 @@ const Ingredients = (props) => {
 
   	return (
     	<div className="App">
-      		<IngredientForm onAddIngr={addIngredientHandler}/>
+      		<IngredientForm 
+      			onAddIngr={addIngredientHandler}
+      			loading={isLoading}
+      		/>
 
       		<section>
         		<Search onLoadIngr={filteredIngredientsHandler} />
