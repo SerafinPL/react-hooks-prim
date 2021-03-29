@@ -20,25 +20,12 @@ const ingredientReducer = (currentIngredients, action) => {
 
 };
 
-const httpReducer = (curHttpState, action) => {
-	switch (action.type) {
-		case 'SEND':
-			return {loading: true, error: null};
-		case 'RESPONSE':
-			return {...curHttpState, loading: false,};
-		case 'ERROR':
-			return {loading: false, error: action.errorMessage};
-		case 'CLEAR_ERROR':
-			return {...curHttpState, error: null};
-		default:
-			throw new Error('błąd który nie wystąpi');
-	};//switch
-};
+
 
 const Ingredients = (props) => {
 	/* [state, function to dipatch actions ]*/
 	const [userIngredients, dispatch] = useReducer(ingredientReducer, []); //(function, initialState)
-	const [httpState, dispatchHttp] = useReducer(httpReducer, {loading: false, error: null});
+	
 	
 
 	useEffect(() => {
@@ -77,19 +64,7 @@ const Ingredients = (props) => {
 
 	const removeIngredientHandler = useCallback(id => {
 		dispatchHttp({type: 'SEND'});
-		fetch(`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`,{
-			method: 'DELETE',
-		})
-		.then(respones => {
-			dispatchHttp({type: 'RESPONSE'});
-			dispatch({
-				type: 'DELETE',
-				id: id
-			})
-		})
-		.catch(error => {
-			dispatchHttp({type: 'ERROR', errorMessage: 'Coś poszło nie tak jak trzeba!'});
-		});
+		
 	}, []);
 
 	const clearError = useCallback(() => {
