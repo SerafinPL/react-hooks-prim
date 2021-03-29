@@ -20,14 +20,14 @@ const ingredientReducer = (currentIngredients, action) => {
 
 };
 
-const httpReducer = (httpState, action) => {
+const httpReducer = (curHttpState, action) => {
 	switch (action.type) {
 		case 'SEND':
-			return {};
+			return {loading: true, error: null};
 		case 'RESPONSE':
-			return ;
+			return {...curHttpState, loading: false,};
 		case 'ERROR':
-			return ;
+			return {loading: false, error: action.errorMessage};
 		default:
 			throw new Error('błąd który nie wystąpi');
 	};//switch
@@ -36,7 +36,7 @@ const httpReducer = (httpState, action) => {
 const Ingredients = (props) => {
 	/* [state, function to dipatch actions ]*/
 	const [userIngredients, dispatch] = useReducer(ingredientReducer, []); //(function, initialState)
-	const [] = useReducer(httpReducer, {loading: false, error: null});
+	const [httpState, dispatchHttp] = useReducer(httpReducer, {loading: false, error: null});
 	// const [userIngredients, setUserIngredients] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState();
@@ -64,19 +64,20 @@ const Ingredients = (props) => {
 		dispatch({
 			type: 'SET',
 			ingredients: ingredientsFilteredArray
-
 		});
 	}, []);
 
 
 	const addIngredientHandler = ingredient => {
-		setIsLoading(true);
+		//setIsLoading(true);
+		dispatchHttp({type: 'SEND'});
 		fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
 			method: 'POST',
 			body: JSON.stringify(ingredient),
 			headers: {'Content-Type': 'application/json'}
 		}).then(response => {
-			setIsLoading(false);
+			//setIsLoading(false);
+			dispatchHttp({type: 'RESPONSE'});
 			return response.json();
 		}).then(responseData => {
 			// setUserIngredients( prevState => [
@@ -93,8 +94,9 @@ const Ingredients = (props) => {
 							} 
 			});
 		}).catch(error => {
-			setIsLoading(false);
-			setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
+			//setIsLoading(false);
+			//setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
+			dispatchHttp({type: 'error', errorMessage: 'Coś poszło nie tak jak trzeba!'});
 		});;
 		
 	};
@@ -103,12 +105,14 @@ const Ingredients = (props) => {
 		// const ingredientsArray = userIngredients.filter((value) => value.id !== id);
 		// setUserIngredients([...ingredientsArray]);
 		//setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
-		setIsLoading(true);
+		//setIsLoading(true);
+		dispatchHttp({type: 'SEND'});
 		fetch(`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`,{
 			method: 'DELETE',
 		})
 		.then(respones => {
-			 setIsLoading(false);
+			 //setIsLoading(false);
+			dispatchHttp({type: 'RESPONSE'});
 			// setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
 			dispatch({
 				type: 'DELETE',
@@ -116,8 +120,9 @@ const Ingredients = (props) => {
 			})
 		})
 		.catch(error => {
-			setIsLoading(false);
-			setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
+			//setIsLoading(false);
+			//setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
+			dispatchHttp({type: 'error', errorMessage: 'Coś poszło nie tak jak trzeba!'});
 		});
 	}
 
