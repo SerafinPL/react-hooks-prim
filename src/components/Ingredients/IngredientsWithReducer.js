@@ -20,6 +20,13 @@ const ingredientReducer = (currentIngredients, action) => {
 
 };
 
+const httpReducer = (httpState, action) => {
+	switch (action.type) {
+		case :
+			return ;
+	};//switch
+};
+
 const Ingredients = (props) => {
 	/* [state, function to dipatch actions ]*/
 	const [userIngredients, dispatch] = useReducer(ingredientReducer, []); //(function, initialState)
