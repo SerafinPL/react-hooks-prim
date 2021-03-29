@@ -22,14 +22,21 @@ const ingredientReducer = (currentIngredients, action) => {
 
 const httpReducer = (httpState, action) => {
 	switch (action.type) {
-		case :
+		case 'SEND':
+			return {};
+		case 'RESPONSE':
 			return ;
+		case 'ERROR':
+			return ;
+		default:
+			throw new Error('błąd który nie wystąpi');
 	};//switch
 };
 
 const Ingredients = (props) => {
 	/* [state, function to dipatch actions ]*/
 	const [userIngredients, dispatch] = useReducer(ingredientReducer, []); //(function, initialState)
+	const [] = useReducer(httpReducer, {loading: false, error: null});
 	// const [userIngredients, setUserIngredients] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState();
