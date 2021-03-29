@@ -4,6 +4,7 @@ import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
 import ErrorModal from '../UI/ErrorModal';
+import useHttp from '../../hooks/http-hook';
 
 const ingredientReducer = (currentIngredients, action) => {
 
@@ -26,6 +27,7 @@ const Ingredients = (props) => {
 	/* [state, function to dipatch actions ]*/
 	const [userIngredients, dispatch] = useReducer(ingredientReducer, []); //(function, initialState)
 	
+	const {isLoading, data, error, sendRequest} = useHttp();
 	
 
 	useEffect(() => {
@@ -41,34 +43,34 @@ const Ingredients = (props) => {
 
 
 	const addIngredientHandler = useCallback(ingredient => {
-		dispatchHttp({type: 'SEND'});
-		fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
-			method: 'POST',
-			body: JSON.stringify(ingredient),
-			headers: {'Content-Type': 'application/json'}
-		}).then(response => {
-			dispatchHttp({type: 'RESPONSE'});
-			return response.json();
-		}).then(responseData => {
-			dispatch({
-				type: 'ADD',
-				ingredient: {
-								id: responseData.name,
-								...ingredient
-							} 
-			});
-		}).catch(error => {
-			dispatchHttp({type: 'ERROR', errorMessage: 'Coś poszło nie tak jak trzeba!'});
-		});;
+		// dispatchHttp({type: 'SEND'});
+		// fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
+		// 	method: 'POST',
+		// 	body: JSON.stringify(ingredient),
+		// 	headers: {'Content-Type': 'application/json'}
+		// }).then(response => {
+		// 	dispatchHttp({type: 'RESPONSE'});
+		// 	return response.json();
+		// }).then(responseData => {
+		// 	dispatch({
+		// 		type: 'ADD',
+		// 		ingredient: {
+		// 						id: responseData.name,
+		// 						...ingredient
+		// 					} 
+		// 	});
+		// }).catch(error => {
+		// 	dispatchHttp({type: 'ERROR', errorMessage: 'Coś poszło nie tak jak trzeba!'});
+		// });
 	}, []);
 
 	const removeIngredientHandler = useCallback(id => {
-		dispatchHttp({type: 'SEND'});
+		sendRequest(`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`, 'DELETE')
 		
 	}, []);
 
 	const clearError = useCallback(() => {
-		dispatchHttp({type: 'CLEAR_ERROR'});
+		// dispatchHttp({type: 'CLEAR_ERROR'});
 	}, []);
 
 	const ingredientList = useMemo(() => {
@@ -78,10 +80,10 @@ const Ingredients = (props) => {
   	return (
     	<div className="App">
     		<h1 style={{textAlign: 'center'}}>Lista Zakupów Na useReducer</h1>
-    		{httpState.error && <ErrorModal onClose={clearError}>{httpState.error}</ErrorModal>}
+    		{error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
       		<IngredientForm 
       			onAddIngr={addIngredientHandler}
-      			loading={httpState.loading}
+      			loading={isLoading}
       		/>
       		<section>
         		<Search onLoadIngr={filteredIngredientsHandler} />
