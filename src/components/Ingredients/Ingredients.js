@@ -34,7 +34,7 @@ const Ingredients = (props) => {
 	}, []);
 
 
-	const addIngredientHandler = ingredient => {
+	const addIngredientHandler = useCallback(ingredient => {
 		setIsLoading(true);
 		fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
 			method: 'POST',
@@ -53,11 +53,11 @@ const Ingredients = (props) => {
 		}).catch(error => {
 			setIsLoading(false);
 			setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
-		});;
+		});
 		
-	};
+	}, []);
 
-	const removeIngredientHandler = id => {
+	const removeIngredientHandler = useCallback(id => {
 		// const ingredientsArray = userIngredients.filter((value) => value.id !== id);
 		// setUserIngredients([...ingredientsArray]);
 		//setUserIngredients(prevArray => prevArray.filter( (value) => value.id !== id ));
@@ -71,7 +71,7 @@ const Ingredients = (props) => {
 			setIsLoading(false);
 			setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
 		});
-	}
+	}, []);
 
 	const clearError = () => {
 		

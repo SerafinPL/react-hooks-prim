@@ -53,7 +53,7 @@ const Ingredients = (props) => {
 	}, []);
 
 
-	const addIngredientHandler = ingredient => {
+	const addIngredientHandler = useCallback(ingredient => {
 		dispatchHttp({type: 'SEND'});
 		fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
 			method: 'POST',
@@ -73,9 +73,9 @@ const Ingredients = (props) => {
 		}).catch(error => {
 			dispatchHttp({type: 'ERROR', errorMessage: 'Coś poszło nie tak jak trzeba!'});
 		});;
-	};
+	}, []);
 
-	const removeIngredientHandler = id => {
+	const removeIngredientHandler = useCallback(id => {
 		dispatchHttp({type: 'SEND'});
 		fetch(`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`,{
 			method: 'DELETE',
@@ -90,7 +90,7 @@ const Ingredients = (props) => {
 		.catch(error => {
 			dispatchHttp({type: 'ERROR', errorMessage: 'Coś poszło nie tak jak trzeba!'});
 		});
-	}
+	}, []);
 
 	const clearError = () => {
 		dispatchHttp({type: 'CLEAR_ERROR'});
