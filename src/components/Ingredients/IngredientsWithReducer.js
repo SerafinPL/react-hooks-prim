@@ -28,6 +28,8 @@ const httpReducer = (curHttpState, action) => {
 			return {...curHttpState, loading: false,};
 		case 'ERROR':
 			return {loading: false, error: action.errorMessage};
+		case 'CLEAR_ERROR':
+			return {...curHttpState, error: null};
 		default:
 			throw new Error('błąd który nie wystąpi');
 	};//switch
@@ -96,7 +98,7 @@ const Ingredients = (props) => {
 		}).catch(error => {
 			//setIsLoading(false);
 			//setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
-			dispatchHttp({type: 'error', errorMessage: 'Coś poszło nie tak jak trzeba!'});
+			dispatchHttp({type: 'ERROR', errorMessage: 'Coś poszło nie tak jak trzeba!'});
 		});;
 		
 	};
@@ -122,23 +124,24 @@ const Ingredients = (props) => {
 		.catch(error => {
 			//setIsLoading(false);
 			//setError(/*error.message*/ 'Coś poszło nie tak jak trzeba!');
-			dispatchHttp({type: 'error', errorMessage: 'Coś poszło nie tak jak trzeba!'});
+			dispatchHttp({type: 'ERROR', errorMessage: 'Coś poszło nie tak jak trzeba!'});
 		});
 	}
 
 	const clearError = () => {
 		
-		setError(null);
+		//setError(null);
+		dispatchHttp({type: 'CLEAR_ERROR'});
 
 	}
 
   	return (
     	<div className="App">
     		<h1 style={{textAlign: 'center'}}>Lista Zakupów Na useReducer</h1>
-    		{error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
+    		{httpState.error && <ErrorModal onClose={clearError}>{httpState.error}</ErrorModal>}
       		<IngredientForm 
       			onAddIngr={addIngredientHandler}
-      			loading={isLoading}
+      			loading={httpState.loading}
       		/>
 
       		<section>
