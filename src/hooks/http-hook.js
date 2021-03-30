@@ -1,6 +1,14 @@
 import {useReducer, useCallback} from 'react';
 
 
+		const initialState = {
+			loading: false, 
+			error: null,
+			data: null,
+			extra: null,
+			identifier: null
+		}
+
 const httpReducer = (curHttpState, action) => {
 	switch (action.type) {
 		case 'SEND':
@@ -10,23 +18,20 @@ const httpReducer = (curHttpState, action) => {
 		case 'ERROR':
 			return {loading: false, error: action.errorMessage};
 		case 'CLEAR_ERROR':
-			return {...curHttpState, error: null};
+			return initialState;
 		default:
 			throw new Error('błąd który nie wystąpi');
 	};//switch
 };
 
 const useHttp = () => {
-	const [httpState, dispatchHttp] = useReducer(
-		httpReducer, 
-		{
-			loading: false, 
-			error: null,
-			data: null,
-			extra: null,
-			identifier: null
-		});
+	const [httpState, dispatchHttp] = useReducer(httpReducer, initialState );
 
+
+	const clearErr = useCallback(() => {
+		dispatchHttp({type: 'CLEAR_ERROR'})
+	}, []);
+	
 	const sendRequest = useCallback((url, method, body, reqExtra, reqIdentifer) => {
 		dispatchHttp({type: 'SEND', identifer: reqIdentifer});
 		fetch(url/*`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`*/,{
@@ -48,9 +53,7 @@ const useHttp = () => {
 
 	}, []);
 
-	const clearErr = useCallback(() => {
-		dispatchHttp({type: 'CLEAR_ERROR'})
-	}, []);
+	
 
 	return {
 		isLoading: httpState.loading,

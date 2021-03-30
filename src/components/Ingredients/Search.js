@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 
 import Card from '../UI/Card';
 import './Search.css';
+import useHttp from '../../hooks/http-hook';
 
 const Search = React.memo(props => {
 
@@ -11,26 +12,37 @@ const Search = React.memo(props => {
 
   const inputRef = useRef();
 
+  const {isLoading, data, error, sendRequest, clearErr} = useHttp();
+
   useEffect(() => {
 
     const timer = setTimeout(() => {
       if(inputState === inputRef.current.value){
           const query = inputState.length === 0 ? '' : `?orderBy="title"&equalTo="${inputState}"`;
-          fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json' + query)
-            .then(response => response.json())
-              .then(responseData => {
-                const loadedIngredients = [];
-                for (const key in responseData){
-                  loadedIngredients.push({id: key, ...responseData[key]})
-                }
-                onLoadIngr(loadedIngredients);
-              });
-      }
-       
-    }, 500);
-    return () => {clearTimeout(timer);}
+          sendRequest('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json' + query, 'GET',)
+          // fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json' + query)
+          //   .then(response => response.json())
+          //     .then(responseData => {
+          //       
 
-  }, [inputState, onLoadIngr, inputRef]);
+            
+      };
+      }, 500);
+    return () => {
+        clearTimeout(timer);
+    }
+
+  }, [inputState, inputRef, sendRequest]); // useEffect
+
+  useEffect(() => {
+    if (!isLoading && !error && data){
+      const loadedIngredients = [];
+      for (const key in data){
+              loadedIngredients.push({id: key, ...data[key]})
+            }
+      onLoadIngr(loadedIngredients);
+    }
+  }, [data, isLoading, error, onLoadIngr]); // useEffect
 
   return (
     <section className="search">
