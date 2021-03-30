@@ -33,7 +33,7 @@ const Ingredients = (props) => {
 	useEffect(() => {
 		if (reqIdentifer === 'REMOVE_INGERDIENT') {
 			dispatch({type: 'DELETE', id: reqExtra});
-		} else {
+		} else if (reqIdentifer === 'ADD_INGERDIENT'){
 			dispatch({type: 'ADD', 
 						ingredient: {id: data.name, ...reqExtra} 
 					});
