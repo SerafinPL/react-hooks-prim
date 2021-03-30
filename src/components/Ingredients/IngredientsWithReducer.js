@@ -31,7 +31,14 @@ const Ingredients = (props) => {
 	
 
 	useEffect(() => {
-		dispatch({type: 'DELETE', id: reqExtra})
+		if (reqExtra) {
+			dispatch({type: 'DELETE', id: reqExtra});
+		} else {
+			dispatch({type: 'ADD', 
+						ingredient: {id: data.name, ...reqExtra} 
+					});
+		}
+		
 	},[data, reqExtra]);
 
 	const filteredIngredientsHandler = useCallback((ingredientsFilteredArray) => {
@@ -47,6 +54,7 @@ const Ingredients = (props) => {
 						'https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',
 						'POST',
 						JSON.stringify(ingredient),
+						ingredient
 					);
 		// dispatchHttp({type: 'SEND'});
 		// fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
