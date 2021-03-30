@@ -27,7 +27,7 @@ const Ingredients = (props) => {
 	/* [state, function to dipatch actions ]*/
 	const [userIngredients, dispatch] = useReducer(ingredientReducer, []); //(function, initialState)
 	
-	const {isLoading, data, error, sendRequest, reqExtra, reqIdentifer} = useHttp();
+	const {isLoading, data, error, sendRequest, reqExtra, reqIdentifer, clearErr} = useHttp();
 	
 
 	useEffect(() => {
@@ -57,25 +57,7 @@ const Ingredients = (props) => {
 						ingredient,
 						'ADD_INGERDIENT'
 					);
-		// dispatchHttp({type: 'SEND'});
-		// fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
-		// 	method: 'POST',
-		// 	body: JSON.stringify(ingredient),
-		// 	headers: {'Content-Type': 'application/json'}
-		// }).then(response => {
-		// 	dispatchHttp({type: 'RESPONSE'});
-		// 	return response.json();
-		// }).then(responseData => {
-		// 	dispatch({
-		// 		type: 'ADD',
-		// 		ingredient: {
-		// 						id: responseData.name,
-		// 						...ingredient
-		// 					} 
-		// 	});
-		// }).catch(error => {
-		// 	dispatchHttp({type: 'ERROR', errorMessage: 'Coś poszło nie tak jak trzeba!'});
-		// });
+	
 	}, [sendRequest]);
 
 	const removeIngredientHandler = useCallback(id => {
@@ -89,8 +71,8 @@ const Ingredients = (props) => {
 	}, [sendRequest]);
 
 	const clearError = useCallback(() => {
-		// dispatchHttp({type: 'CLEAR_ERROR'});
-	}, []);
+		clearErr();
+	}, [clearErr]);
 
 	const ingredientList = useMemo(() => {
 		return <IngredientList ingredients={userIngredients} onRemoveItem={ removeIngredientHandler }/>;

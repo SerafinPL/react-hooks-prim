@@ -38,10 +38,6 @@ const useHttp = () => {
 		})
 		.then(response => {
 			return response.json();
-			// dispatch({
-			// 	type: 'DELETE',
-			// 	id: id
-			// })
 		})
 		.then(responseConverted => {
 			dispatchHttp({type: 'RESPONSE', responseData: responseConverted, extra: reqExtra });
@@ -52,13 +48,18 @@ const useHttp = () => {
 
 	}, []);
 
+	const clearErr = useCallback(() => {
+		dispatchHttp({type: 'CLEAR_ERROR'})
+	}, []);
+
 	return {
 		isLoading: httpState.loading,
 		data: httpState.data,
 		error: httpState.error,
 		sendRequest: sendRequest,
 		reqExtra: httpState.extra,
-		reqIdentifer: httpState.identifier
+		reqIdentifer: httpState.identifier,
+		clearErr: clearErr
 
 	};
 	
