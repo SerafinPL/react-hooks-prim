@@ -31,15 +31,15 @@ const Ingredients = (props) => {
 	
 
 	useEffect(() => {
-		if (reqIdentifer === 'REMOVE_INGERDIENT') {
+		if (!isLoading && reqIdentifer === 'REMOVE_INGERDIENT') {
 			dispatch({type: 'DELETE', id: reqExtra});
-		} else if (reqIdentifer === 'ADD_INGERDIENT'){
+		} else if (!isLoading && !error && reqIdentifer === 'ADD_INGERDIENT'){
 			dispatch({type: 'ADD', 
 						ingredient: {id: data.name, ...reqExtra} 
 					});
 		}
 		
-	},[data, reqExtra, reqIdentifer]);
+	},[data, reqExtra, reqIdentifer, isLoading]);
 
 	const filteredIngredientsHandler = useCallback((ingredientsFilteredArray) => {
 		dispatch({
