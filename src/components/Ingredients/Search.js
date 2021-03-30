@@ -3,6 +3,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import Card from '../UI/Card';
 import './Search.css';
 import useHttp from '../../hooks/http-hook';
+import ErrorModal from '../UI/ErrorModal';
 
 const Search = React.memo(props => {
 
@@ -46,9 +47,11 @@ const Search = React.memo(props => {
 
   return (
     <section className="search">
+      {error && <ErrorModal onClose={clearErr}>{error}</ErrorModal>}
       <Card>
         <div className="search-input">
           <label>Filter by Title</label>
+          {isLoading && <span>Wczytuje...</span>}
           <input 
             ref={inputRef}
             type="text" 
