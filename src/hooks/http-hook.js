@@ -4,7 +4,7 @@ import {useReducer, useCallback} from 'react';
 const httpReducer = (curHttpState, action) => {
 	switch (action.type) {
 		case 'SEND':
-			return {loading: true, error: null, data: null, extra: null};
+			return {loading: true, error: null, data: null, extra: null, identifier: action.identifer};
 		case 'RESPONSE':
 			return {...curHttpState, loading: false, data: action.responseData, extra: action.extra};
 		case 'ERROR':
@@ -27,8 +27,8 @@ const useHttp = () => {
 			identifier: null
 		});
 
-	const sendRequest = useCallback((url, method, body, reqExtra) => {
-		dispatchHttp({type: 'SEND'});
+	const sendRequest = useCallback((url, method, body, reqExtra, reqIdentifer) => {
+		dispatchHttp({type: 'SEND', identifer: reqIdentifer});
 		fetch(url/*`https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`*/,{
 			method: method/*'DELETE'*/,
 			body: body,
@@ -57,7 +57,8 @@ const useHttp = () => {
 		data: httpState.data,
 		error: httpState.error,
 		sendRequest: sendRequest,
-		reqExtra: httpState.extra
+		reqExtra: httpState.extra,
+		reqIdentifer: httpState.identifier
 
 	};
 	

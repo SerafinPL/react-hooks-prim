@@ -27,11 +27,11 @@ const Ingredients = (props) => {
 	/* [state, function to dipatch actions ]*/
 	const [userIngredients, dispatch] = useReducer(ingredientReducer, []); //(function, initialState)
 	
-	const {isLoading, data, error, sendRequest, reqExtra} = useHttp();
+	const {isLoading, data, error, sendRequest, reqExtra, reqIdentifer} = useHttp();
 	
 
 	useEffect(() => {
-		if (reqExtra) {
+		if (reqIdentifer === 'REMOVE_INGERDIENT') {
 			dispatch({type: 'DELETE', id: reqExtra});
 		} else {
 			dispatch({type: 'ADD', 
@@ -39,7 +39,7 @@ const Ingredients = (props) => {
 					});
 		}
 		
-	},[data, reqExtra]);
+	},[data, reqExtra, reqIdentifer]);
 
 	const filteredIngredientsHandler = useCallback((ingredientsFilteredArray) => {
 		dispatch({
@@ -54,7 +54,8 @@ const Ingredients = (props) => {
 						'https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',
 						'POST',
 						JSON.stringify(ingredient),
-						ingredient
+						ingredient,
+						'ADD_INGERDIENT'
 					);
 		// dispatchHttp({type: 'SEND'});
 		// fetch('https://hooks-e900b-default-rtdb.firebaseio.com/ingredients.json',{
@@ -81,7 +82,8 @@ const Ingredients = (props) => {
 		sendRequest( `https://hooks-e900b-default-rtdb.firebaseio.com/ingredients/${id}.json`, 
 						'DELETE',
 						null,
-						id 
+						id,
+						'REMOVE_INGERDIENT' 
 					);
 		
 	}, [sendRequest]);
