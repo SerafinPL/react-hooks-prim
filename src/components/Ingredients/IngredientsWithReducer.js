@@ -31,7 +31,7 @@ const Ingredients = (props) => {
 	
 
 	useEffect(() => {
-		if (!isLoading && reqIdentifer === 'REMOVE_INGERDIENT') {
+		if (!isLoading && !error && reqIdentifer === 'REMOVE_INGERDIENT') {
 			dispatch({type: 'DELETE', id: reqExtra});
 		} else if (!isLoading && !error && reqIdentifer === 'ADD_INGERDIENT'){
 			dispatch({type: 'ADD', 
@@ -39,7 +39,7 @@ const Ingredients = (props) => {
 					});
 		}
 		
-	},[data, reqExtra, reqIdentifer, isLoading]);
+	},[data, reqExtra, reqIdentifer, isLoading, error]);
 
 	const filteredIngredientsHandler = useCallback((ingredientsFilteredArray) => {
 		dispatch({
